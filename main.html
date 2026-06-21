@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>nono.delivery26 — Courier &amp; Delivery in Medea</title>
+  <meta name="description"
+    content="Independent courier and delivery service in Medea, Algeria. Fast, careful, on time. Message on Facebook or call directly.">
+  <link rel="icon"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23FF5A1F'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* =========================================================
+   COURIER LINK PAGE — STYLE SHEET
+   Theme: "delivery docket" — paper tags, dashed routes,
+   ink-navy base, signal-orange + mint accents.
+   ========================================================= */
+
+    :root {
+      /* ---- Color tokens (edit your brand colors here) ---- */
+      --ink: #0E1B22;
+      /* page background */
+      --ink-2: #142931;
+      /* raised panels on dark */
+      --ink-3: #1C3641;
+      /* hover / deeper panels */
+      --ink-border: #28454F;
+      /* hairline borders on dark */
+      --paper: #F7F1E3;
+      /* light "docket" card surface */
+      --paper-2: #E7DBBE;
+      /* paper shadow / divider */
+      --signal: #FF5A1F;
+      /* primary brand accent — energy/speed */
+      --signal-2: #FF7A45;
+      /* signal hover */
+      --mint: #2FD18B;
+      /* trust / "available" accent */
+      --text: #EAF3F3;
+      /* light text on dark */
+      --text-dim: #9FB9C0;
+      /* muted text on dark */
+      --ink-text: #16242B;
+      /* dark text on paper/orange */
+
+      --font-display: 'Bricolage Grotesque', 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      --container: 1140px;
+      --r-lg: 26px;
+      --r-md: 18px;
+      --r-sm: 10px;
+      --ease: cubic-bezier(.22, .9, .27, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--ink);
+      color: var(--text);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    ::selection {
+      background: var(--signal);
+      color: var(--ink-text);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--mint);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    .container {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---------------------------------------------------------
+   Ambient backdrop — faint map-grid + soft glows
+   --------------------------------------------------------- */
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 16% 0%, rgba(255, 90, 31, 0.16), transparent 45%),
+        radial-gradient(circle at 88% 18%, rgba(47, 209, 139, 0.10), transparent 40%),
+        var(--ink);
+    }
+
+    .backdrop::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--ink-border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--ink-border) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: .14;
+      mask-image: linear-gradient(to bottom, black, transparent 70%);
+    }
+
+    /* ---------------------------------------------------------
+   Top route-progress bar — the page's signature element.
+   Tracks scroll like a delivery in transit.
+   --------------------------------------------------------- */
+    .route-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      z-index: 60;
+      background: repeating-linear-gradient(90deg, var(--ink-3) 0 10px, transparent 10px 16px);
+    }
+
+    .route-bar__fill {
+      position: absolute;
+      inset: 0;
+      width: 0%;
+      background: linear-gradient(90deg, var(--signal), var(--mint));
+      transition: width .12s linear;
+    }
+
+    .route-bar__pin {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      width: 16px;
+      height: 16px;
+      margin-top: -8px;
+      margin-left: -8px;
+      background: var(--ink);
+      border: 2px solid var(--mint);
+      border-radius: 50%;
+      transition: left .12s linear;
+      box-shadow: 0 0 0 4px rgba(47, 209, 139, .18);
+    }
+
+    .route-status {
+      position: fixed;
+      top: 10px;
+      right: 18px;
+      z-index: 60;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .06em;
+      color: var(--text-dim);
+      background: var(--ink-2);
+      border: 1px solid var(--ink-border);
+      padding: 5px 10px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity .3s, transform .3s;
+    }
+
+    .route-status.is-on {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .route-status b {
+      color: var(--mint);
+      font-weight: 600;
+    }
+
+    @media (max-width:680px) {
+      .route-status {
+        display: none;
+      }
+    }
+
+    /* ---------------------------------------------------------
+   Header
+   --------------------------------------------------------- */
+    .site-header {
+      position: sticky;
+      top: 4px;
+      z-index: 50;
+      background: rgba(14, 27, 34, .72);
+      backdrop-filter: blur(14px) saturate(140%);
+      border-bottom: 1px solid var(--ink-border);
+    }
+
+    .site-header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+    }
+
+    .brand__mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(150deg, var(--signal), var(--signal-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--ink-text);
+      font-size: 15px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand__text {
+      line-height: 1.15;
+    }
+
+    .brand__name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 15.5px;
+    }
+
+    .brand__role {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-dim);
+      letter-spacing: .03em;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 14.5px;
+      padding: 11px 20px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: transform .22s var(--ease), box-shadow .22s var(--ease), background .22s var(--ease), border-color .22s var(--ease);
+    }
+
+    .btn svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+    }
+
+    .btn-solid {
+      background: var(--signal);
+      color: var(--ink-text);
+      box-shadow: 0 8px 20px -8px rgba(255, 90, 31, .55);
+    }
+
+    .btn-solid:hover {
+      background: var(--signal-2);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -8px rgba(255, 90, 31, .6);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border-color: var(--ink-border);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--mint);
+      color: var(--mint);
+      transform: translateY(-2px);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .btn-sm {
+      padding: 9px 15px;
+      font-size: 13px;
+    }
+
+    @media (max-width:560px) {
+      .header-cta .btn-label {
+        display: none;
+      }
+
+      .header-cta .btn {
+        padding: 11px 13px;
+      }
+    }
+
+    /* ---------------------------------------------------------
+   Section scaffolding
+   --------------------------------------------------------- */
+    section {
+      position: relative;
+      padding: 88px 0;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--mint);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 3px rgba(47, 209, 139, .2);
+    }
+
+    .section-head {
+      max-width: 640px;
+      margin-bottom: 48px;
+    }
+
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.12;
+      margin: 0 0 14px;
+      letter-spacing: -.01em;
+    }
+
+    .section-head p {
+      color: var(--text-dim);
+      font-size: 16.5px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===========================================================
+   HERO
+   =========================================================== */
+    .hero {
+      padding-top: 64px;
+      padding-bottom: 60px;
+    }
+
+    .hero__grid {
+      display: grid;
+      gap: 52px;
+      align-items: center;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width:980px) {
+      .hero__grid {
+        grid-template-columns: 1.08fr .92fr;
+        gap: 40px;
+      }
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--ink-2);
+      border: 1px solid var(--ink-border);
+      padding: 7px 14px 7px 10px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-bottom: 22px;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--mint);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .status-dot::after {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1.5px solid var(--mint);
+      animation: pulse-ring 2.2s ease-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        transform: scale(.6);
+        opacity: .9;
+      }
+
+      100% {
+        transform: scale(1.9);
+        opacity: 0;
+      }
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 800;
+      letter-spacing: -.015em;
+      font-size: clamp(40px, 6.6vw, 68px);
+      line-height: 1.02;
+      margin: 0 0 10px;
+    }
+
+    .hero__id {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-dim);
+      letter-spacing: .04em;
+      margin: 0 0 18px;
+    }
+
+    .hero__id b {
+      color: var(--text);
+    }
+
+    .hero p.tagline {
+      font-size: 18px;
+      line-height: 1.65;
+      color: var(--text-dim);
+      max-width: 520px;
+      margin: 0 0 32px;
+    }
+
+    .hero__cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .hero__note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      color: var(--text-dim);
+    }
+
+    .hero__note svg {
+      width: 15px;
+      height: 15px;
+      color: var(--mint);
+    }
+
+    /* --- Logo showcase visual (replaces the old "ticket" ID card) --- */
+    .id-card-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo-card {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 1/1;
+      background: var(--ink-2);
+      border: 1px solid var(--ink-border);
+      border-radius: var(--r-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14%;
+      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .55);
+      overflow: hidden;
+      transition: transform .4s var(--ease), border-color .4s var(--ease);
+    }
+
+    .logo-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--ink-border);
+    }
+
+    .logo-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 38%, rgba(255, 90, 31, .16), transparent 65%);
+    }
+
+    .logo-card__ring {
+      position: absolute;
+      inset: 9%;
+      border: 1.5px dashed var(--ink-border);
+      border-radius: 50%;
+      animation: spin-slow 50s linear infinite;
+    }
+
+    @keyframes spin-slow {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .logo-card__status {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 2;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--mint);
+    }
+
+    .logo-card__status::after {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1.5px solid var(--mint);
+      animation: pulse-ring 2.2s ease-out infinite;
+    }
+
+    .logo-card__img {
+      position: relative;
+      z-index: 1;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 24px rgba(0, 0, 0, .4));
+    }
+
+    .logo-card__fallback {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, var(--signal), #C2410C);
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: #fff;
+      font-size: 28px;
+    }
+
+    .logo-caption {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 20px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-dim);
+      letter-spacing: .03em;
+    }
+
+    .logo-caption svg {
+      width: 14px;
+      height: 14px;
+      color: var(--mint);
+    }
+
+    .ticket-divider {
+      position: relative;
+      border-top: 2px dashed var(--paper-2);
+      margin: 0 -26px;
+    }
+
+    .ticket-divider::before,
+    .ticket-divider::after {
+      content: "";
+      position: absolute;
+      top: -9px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--ink);
+    }
+
+    .ticket-divider::before {
+      left: -9px;
+    }
+
+    .ticket-divider::after {
+      right: -9px;
+    }
+
+    /* ===========================================================
+   SERVICES — waybill stub cards
+   =========================================================== */
+    .services-grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width:640px) {
+      .services-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (min-width:1100px) {
+      .services-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .stub-card {
+      background: var(--paper);
+      color: var(--ink-text);
+      border-radius: var(--r-md);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 18px 36px -22px rgba(0, 0, 0, .5);
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    }
+
+    .stub-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 26px 44px -20px rgba(0, 0, 0, .6);
+    }
+
+    .stub-card__body {
+      padding: 26px 24px 20px;
+      flex: 1;
+    }
+
+    .stub-card__icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      margin-bottom: 16px;
+      background: var(--ink);
+      color: var(--signal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stub-card__icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .stub-card__body h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 8px;
+    }
+
+    .stub-card__body p {
+      font-size: 14px;
+      line-height: 1.55;
+      color: #5b5340;
+      margin: 0;
+    }
+
+    .stub-card .ticket-divider {
+      margin: 0 24px;
+    }
+
+    .stub-card .ticket-divider::before {
+      left: -9px;
+    }
+
+    .stub-card .ticket-divider::after {
+      right: -9px;
+    }
+
+    .stub-card__tag {
+      padding: 13px 24px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .04em;
+      color: #6b5f47;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .stub-card__tag::before {
+      content: "▸";
+      color: var(--signal);
+    }
+
+    /* ===========================================================
+   TRUST STRIP
+   =========================================================== */
+    .trust-strip {
+      padding: 0 0 88px;
+    }
+
+    .trust-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .trust-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--ink-2);
+      border: 1px solid var(--ink-border);
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      color: var(--text-dim);
+    }
+
+    .trust-chip svg {
+      width: 17px;
+      height: 17px;
+      color: var(--mint);
+      flex-shrink: 0;
+    }
+
+    .trust-chip b {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ===========================================================
+   COVERAGE + HOURS
+   =========================================================== */
+    .coverage-grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width:780px) {
+      .coverage-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--ink-2);
+      border: 1px solid var(--ink-border);
+      border-radius: var(--r-md);
+      padding: 30px 28px;
+    }
+
+    .panel h3 {
+      font-family: var(--font-display);
+      font-size: 19px;
+      margin: 0 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel h3 svg {
+      width: 19px;
+      height: 19px;
+      color: var(--signal);
+    }
+
+    .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+
+    .hours-table tr {
+      border-bottom: 1px dashed var(--ink-border);
+    }
+
+    .hours-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .hours-table td {
+      padding: 11px 0;
+    }
+
+    .hours-table td:first-child {
+      color: var(--text-dim);
+    }
+
+    .hours-table td:last-child {
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .hours-note {
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .map-art {
+      width: 100%;
+      height: 120px;
+      margin-bottom: 18px;
+      border-radius: var(--r-sm);
+      overflow: hidden;
+      background: var(--ink-3);
+    }
+
+    .coverage-note {
+      font-size: 14.5px;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .coverage-note b {
+      color: var(--text);
+    }
+
+    /* ===========================================================
+   LINKS / MANIFEST
+   =========================================================== */
+    .links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .link-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 17px 19px;
+      background: var(--ink-2);
+      border: 1px solid var(--ink-border);
+      border-radius: var(--r-md);
+      text-decoration: none;
+      color: var(--text);
+      transition: transform .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
+    }
+
+    .link-row:hover {
+      transform: translateY(-3px) translateX(2px);
+      border-color: var(--signal);
+      background: var(--ink-3);
+    }
+
+    .link-row__icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 13px;
+      flex-shrink: 0;
+      background: var(--ink-3);
+      color: var(--signal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .25s var(--ease), color .25s var(--ease), background .25s var(--ease);
+    }
+
+    .link-row__icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .link-row:hover .link-row__icon {
+      background: var(--ink);
+      color: var(--mint);
+      transform: rotate(-6deg) scale(1.06);
+    }
+
+    .link-row__text {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .link-row__label {
+      font-weight: 600;
+      font-size: 15.5px;
+    }
+
+    .link-row__sub {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .link-row__arrow {
+      color: var(--text-dim);
+      flex-shrink: 0;
+      transition: transform .25s var(--ease), color .25s var(--ease);
+    }
+
+    .link-row__arrow svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .link-row:hover .link-row__arrow {
+      transform: translateX(5px);
+      color: var(--mint);
+    }
+
+    /* ===========================================================
+   FOOTER
+   =========================================================== */
+    footer {
+      padding: 50px 0 70px;
+      text-align: center;
+    }
+
+    .footer-line {
+      width: 64px;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, var(--ink-border) 0 6px, transparent 6px 10px);
+      margin: 0 auto 24px;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin: 4px 0;
+      font-family: var(--font-mono);
+    }
+
+    footer .heart {
+      color: var(--signal);
+    }
+
+    /* ===========================================================
+   Motion preference
+   =========================================================== */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .status-dot::after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <!-- Route progress bar: tracks scroll position like a live delivery -->
+  <div class="route-bar" aria-hidden="true">
+    <div class="route-bar__fill" id="routeFill"></div>
+    <div class="route-bar__pin" id="routePin"></div>
+  </div>
+  <div class="route-status" id="routeStatus" aria-hidden="true">
+    <span><span id="routeStatusLabel">on the way</span> · <b id="routePct">0%</b></span>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="#top" class="brand">
+        <span class="brand__mark" id="brandMark">
+          <img id="brandMarkImg" src="" alt=""
+            style="width:100%;height:100%;object-fit:cover;border-radius:11px;display:none;"
+            onerror="this.style.display='none';">
+          <span id="brandInitials">NONO</span>
+        </span>
+        <span class="brand__text">
+          <span class="brand__name" id="brandName">—</span><br>
+          <span class="brand__role" id="brandTrackingId">—</span>
+        </span>
+      </a>
+      <div class="header-cta">
+        <a class="btn btn-solid btn-sm" id="headerCta" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5.5" />
+            <path d="M14 8.6h-1.3c-.9 0-1.3.5-1.3 1.4v1.3H9v2.1h2.4V18h2.3v-4.6h2l.4-2.1h-2.4v-1c0-.4.2-.6.6-.6H14V8.6Z"
+              fill="currentColor" stroke="none" />
+          </svg>
+          <span class="btn-label">Message</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <div class="container hero__grid">
+        <div>
+          <div class="status-pill"><span class="status-dot"></span><span id="statusText">—</span></div>
+          <h1 id="heroName">—</h1>
+          <p class="hero__id">Independent courier · <b id="heroCity">—</b></p>
+          <p class="tagline" id="heroTagline">—</p>
+          <div class="hero__cta">
+            <a class="btn btn-solid" id="ctaFacebook" href="#" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+                stroke-linejoin="round">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="5.5" />
+                <path
+                  d="M14 8.6h-1.3c-.9 0-1.3.5-1.3 1.4v1.3H9v2.1h2.4V18h2.3v-4.6h2l.4-2.1h-2.4v-1c0-.4.2-.6.6-.6H14V8.6Z"
+                  fill="currentColor" stroke="none" />
+              </svg>
+              Message on Facebook
+            </a>
+            <a class="btn btn-outline" id="ctaCall" href="#">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path
+                  d="M6.6 10.8c1.6 3.2 4.4 6 7.6 7.6l2.5-2.5c.3-.3.8-.4 1.2-.3 1.3.4 2.7.6 4.1.6.6 0 1 .4 1 1V21c0 .6-.4 1-1 1C10.6 22 2 13.4 2 2.9c0-.6.4-1 1-1h3.8c.6 0 1 .4 1 1 0 1.4.2 2.8.6 4.1.1.4 0 .9-.3 1.2L6.6 10.8Z" />
+              </svg>
+              Call now
+            </a>
+          </div>
+          <div class="hero__note">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round">
+              <circle cx="12" cy="12" r="8.5" />
+              <path d="M12 7.5V12l3 2" />
+            </svg>
+            <span>Usually replies in under 10 minutes</span>
+          </div>
+        </div>
+
+        <div class="id-card-wrap">
+          <div class="logo-card reveal">
+            <span class="logo-card__status" aria-hidden="true"></span>
+            <span class="logo-card__ring" aria-hidden="true"></span>
+            <img class="logo-card__img" id="logoImg" src="" alt="" style="display:none;"
+              onload="this.style.display='block'; document.getElementById('logoFallback').style.display='none';"
+              onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+            <span class="logo-card__fallback" id="logoFallback"><span id="logoFallbackInitials">NONO</span></span>
+          </div>
+          <div class="logo-caption">
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SERVICES ===================== -->
+    <section id="services">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">What I deliver</p>
+          <h2>Pick a route, I'll handle the rest.</h2>
+          <p>From dinner that's still steaming to documents that need a signature — tell me what and where, and I'll
+            take it from here.</p>
+        </div>
+        <div class="services-grid" id="servicesGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===================== TRUST ===================== -->
+    <section class="trust-strip">
+      <div class="container">
+        <div class="trust-row reveal" id="trustRow"></div>
+      </div>
+    </section>
+
+    <!-- ===================== COVERAGE + HOURS ===================== -->
+    <section id="coverage">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Where &amp; when</p>
+          <h2>On the road, on schedule.</h2>
+          <p>Predictable hours and a clear coverage area, so you always know when to expect me.</p>
+        </div>
+        <div class="coverage-grid">
+          <div class="panel reveal">
+            <h3>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="8.5" />
+                <path d="M12 7.5V12l3 2" />
+              </svg>
+              Working hours
+            </h3>
+            <table class="hours-table" id="hoursTable"></table>
+            <p class="hours-note">Outside these hours? Send a message anyway — urgent runs are sometimes possible.</p>
+          </div>
+          <div class="panel reveal">
+            <h3>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z" />
+                <circle cx="12" cy="10" r="2.6" />
+              </svg>
+              Coverage area
+            </h3>
+            <svg class="map-art" viewBox="0 0 320 120" preserveAspectRatio="none" aria-hidden="true">
+              <rect width="320" height="120" fill="#15262F" />
+              <g fill="#1F3A45">
+                <rect x="14" y="62" width="34" height="34" />
+                <rect x="56" y="40" width="26" height="56" />
+                <rect x="92" y="70" width="40" height="26" />
+                <rect x="206" y="34" width="30" height="62" />
+                <rect x="246" y="58" width="46" height="38" />
+                <rect x="178" y="76" width="20" height="20" />
+              </g>
+              <path d="M20 100 C 90 30, 160 110, 230 40 S 300 20, 308 18" stroke="#FF5A1F" stroke-width="2.4"
+                stroke-dasharray="6 6" fill="none" stroke-linecap="round" />
+              <circle cx="20" cy="100" r="4.5" fill="#2FD18B" />
+              <circle cx="308" cy="18" r="6" fill="#FF5A1F" />
+              <circle cx="308" cy="18" r="6" fill="none" stroke="#FF5A1F" stroke-width="1.5" opacity=".5">
+                <animate attributeName="r" values="6;13;6" dur="2.6s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values=".5;0;.5" dur="2.6s" repeatCount="indefinite" />
+              </circle>
+            </svg>
+            <p class="coverage-note" id="coverageNote">—</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LINKS / CONTACT ===================== -->
+    <section id="contact">
+      <div class="container">
+        <div class="section-head reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
+          <p class="eyebrow" style="justify-content:center;">Get in touch</p>
+          <h2>Send a message.</h2>
+          <p style="margin:0 auto;">Tap whichever way you like to reach me — I check all of these.</p>
+        </div>
+        <div class="links-list reveal" id="linksList"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-line"></div>
+      <p id="footerName">—</p>
+      <p>Built for speed, care, and an on-time arrival <span class="heart">●</span></p>
+    </div>
+  </footer>
+
+  <script>
+    const CONFIG = {
+      name: "nono.delivery26",
+      initials: "NONO",
+      role: "Independent Courier & Delivery Partner",
+      city: "Medea, Algeria",
+      trackingId: "DLV-2381",
+      tagline: "Fast, careful, and on time — delivery you can actually rely on. No call centre, no middleman: message me directly and I'll get it there.",
+
+      logoUrl: "logo.png",
+
+      status: { available: true, text: "Available now — accepting orders" },
+
+      phoneDisplay: "+213 782307059",
+      phoneHref: "tel:+213 782307059",
+      facebookHref: "https://www.facebook.com/people/NONODelivery26/61591314441848/?_rdc=1&_rdr#",
+
+      services: [
+        { icon: "food", title: "Food & Restaurant Orders", desc: "Hot meals picked up fast and delivered while they're still fresh.", tag: "" },
+        { icon: "package", title: "Documents & Parcels", desc: "Papers, packages, and small parcels handled with care, door to door.", tag: "Same-day" },
+        { icon: "cart", title: "Grocery & Pharmacy Runs", desc: "Send the list, I'll handle the queue and bring it straight to you.", tag: "Zone: city-wide" },
+        { icon: "bolt", title: "Express Courier", desc: "Urgent drop-off? One message and it's on its way within minutes.", tag: "Priority" }
+      ],
+
+      hours: [
+        { day: "Mon – Sat", time: "08:00 – 20:00" },
+        { day: "Sunday", time: "09:00 – 14:00" }
+      ],
+      coverageNote: "Based in <b>Medea</b> — covering nearby wilayas and surrounding towns on request. Just share your address and I'll confirm if it's on the route.",
+
+      links: [
+        { type: "phone", label: "Call directly", sub: "+213 782307059", href: "tel:+213 782307059" },
+        { type: "instagram", label: "Instagram", sub: "@nono.delivery26", href: "https://www.instagram.com/nono.delivery26?igsh=MTkzb2lubWZzMWZkcA%3D%3D" },
+        { type: "facebook", label: "Facebook", sub: "nono.delivery26", href: "https://www.facebook.com/people/NONODelivery26/61591314441848/?_rdc=1&_rdr#" },
+        { type: "tiktok", label: "Tiktok", sub: "NONO.Delivery26", href: "https://www.tiktok.com/@nono.delivery26?_r=1&_t=ZS-97PBbN1C0ZB" },
+        { type: "pin", label: "Service area", sub: "Medea & surrounding areas", href: "https://maps.google.com/?q=Medea,Algeria" }
+      ],
+
+      footerNote: "© 2026 NONO.Delivery26 · All deliveries handled personally."
+    };
+
+    const ICONS = {
+      facebook: `<rect x="3.5" y="3.5" width="17" height="17" rx="5.5"/><path d="M14 8.6h-1.3c-.9 0-1.3.5-1.3 1.4v1.3H9v2.1h2.4V18h2.3v-4.6h2l.4-2.1h-2.4v-1c0-.4.2-.6.6-.6H14V8.6Z" fill="currentColor" stroke="none"/>`,
+      phone: `<path d="M6.6 10.8c1.6 3.2 4.4 6 7.6 7.6l2.5-2.5c.3-.3.8-.4 1.2-.3 1.3.4 2.7.6 4.1.6.6 0 1 .4 1 1V21c0 .6-.4 1-1 1C10.6 22 2 13.4 2 2.9c0-.6.4-1 1-1h3.8c.6 0 1 .4 1 1 0 1.4.2 2.8.6 4.1.1.4 0 .9-.3 1.2L6.6 10.8Z"/>`,
+      instagram: `<rect x="3.5" y="3.5" width="17" height="17" rx="5.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.6" cy="7.4" r="0.9" fill="currentColor" stroke="none"/>`,
+      mail: `<rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l7 5.5L20 7"/>`,
+      pin: `<path d="M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.6"/>`,
+      food: `<path d="M7 2v7a1.4 1.4 0 0 0 2.8 0V2"/><path d="M8.4 9.5V21"/><path d="M16.5 2c-1.4 0-2.5 1.9-2.5 4.5S15.1 11 16.5 11V21"/>`,
+      package: `<path d="M21 7.5 12 3 3 7.5 12 12l9-4.5Z"/><path d="M3 7.5v9L12 21l9-4.5v-9"/><path d="M12 12v9"/>`,
+      cart: `<circle cx="9" cy="20" r="1.4" fill="currentColor" stroke="none"/><circle cx="17" cy="20" r="1.4" fill="currentColor" stroke="none"/><path d="M3 4h2l2.4 11.5a2 2 0 0 0 2 1.5h7.2a2 2 0 0 0 2-1.6L20 8H6"/>`,
+      bolt: `<path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/>`,
+      shield: `<path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3Z"/><path d="M9 12l2 2 4-4"/>`,
+      card: `<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18"/><path d="M7 15h4"/>`,
+      star: `<path d="M12 3.3l2.7 5.5 6 .8-4.4 4.2 1.2 6-5.5-3-5.5 3 1.2-6-4.4-4.2 6-.8L12 3.3Z"/>`,
+      arrow: `<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>`,
+      tiktok: `<path d="M14.5 3v10.2a3.2 3.2 0 1 1-2.3-3.1V7.4c-.4-.1-.8-.1-1.2-.1A5.7 5.7 0 1 0 16.8 13V8.6c1.1.8 2.4 1.3 3.7 1.4V7.7c-1.7-.3-3.3-1.7-4-3.7h-2Z" fill="currentColor" stroke="none"/>`,
+    };
+    function icon(name, extraClass = "") {
+      return `<svg class="${extraClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ""}</svg>`;
+    }
+
+    function render() {
+      // Header / brand
+      document.getElementById('brandInitials').textContent = CONFIG.initials;
+      document.getElementById('brandName').textContent = CONFIG.name;
+      document.getElementById('brandTrackingId').textContent = "ID · " + CONFIG.trackingId;
+      document.getElementById('headerCta').href = CONFIG.facebookHref;
+      if (CONFIG.logoUrl) {
+        const markImg = document.getElementById('brandMarkImg');
+        markImg.src = CONFIG.logoUrl;
+        markImg.alt = CONFIG.name + " logo";
+        markImg.onload = () => { markImg.style.display = 'block'; document.getElementById('brandInitials').style.display = 'none'; };
+      }
+
+      // Hero
+      document.getElementById('statusText').textContent = CONFIG.status.text;
+      document.getElementById('heroName').textContent = CONFIG.name;
+      document.getElementById('heroCity').textContent = CONFIG.city;
+      document.getElementById('heroTagline').textContent = CONFIG.tagline;
+      document.getElementById('ctaFacebook').href = CONFIG.facebookHref;
+      document.getElementById('ctaCall').href = CONFIG.phoneHref;
+
+      // Logo showcase card
+      document.getElementById('logoFallbackInitials').textContent = CONFIG.initials;
+      if (CONFIG.logoUrl) {
+        const logoImg = document.getElementById('logoImg');
+        logoImg.alt = CONFIG.name + " logo";
+        logoImg.src = CONFIG.logoUrl;
+      }
+
+      // Services
+      document.getElementById('servicesGrid').innerHTML = CONFIG.services.map(s => `
+    <div class="stub-card reveal">
+      <div class="stub-card__body">
+        <div class="stub-card__icon">${icon(s.icon)}</div>
+        <h3>${s.title}</h3>
+        <p>${s.desc}</p>
+      </div>
+      <div class="ticket-divider"></div>
+      <div class="stub-card__tag">${s.tag}</div>
+    </div>
+  `).join('');
+
+      // Hours
+      document.getElementById('hoursTable').innerHTML = CONFIG.hours.map(h => `
+    <tr><td>${h.day}</td><td>${h.time}</td></tr>
+  `).join('');
+
+      // Coverage
+      document.getElementById('coverageNote').innerHTML = CONFIG.coverageNote;
+
+      // Links
+      document.getElementById('linksList').innerHTML = CONFIG.links.map(l => `
+    <a class="link-row" href="${l.href}" target="_blank" rel="noopener" aria-label="${l.label}: ${l.sub}">
+      <span class="link-row__icon">${icon(l.type)}</span>
+      <span class="link-row__text">
+        <span class="link-row__label">${l.label}</span>
+        <span class="link-row__sub">${l.sub}</span>
+      </span>
+      <span class="link-row__arrow">${icon('arrow')}</span>
+    </a>
+  `).join('');
+
+      // Footer
+      document.getElementById('footerName').textContent = CONFIG.footerNote;
+    }
+    render();
+
+    /* Route progress bar */
+    const fillEl = document.getElementById('routeFill');
+    const pinEl = document.getElementById('routePin');
+    const statusEl = document.getElementById('routeStatus');
+    const pctEl = document.getElementById('routePct');
+    const labelEl = document.getElementById('routeStatusLabel');
+    let ticking = false;
+
+    function updateRoute() {
+      const doc = document.documentElement;
+      const scrollTop = doc.scrollTop || document.body.scrollTop;
+      const max = (doc.scrollHeight - doc.clientHeight) || 1;
+      const pct = Math.min(100, Math.max(0, (scrollTop / max) * 100));
+      fillEl.style.width = pct + '%';
+      pinEl.style.left = pct + '%';
+      pctEl.textContent = Math.round(pct) + '%';
+      labelEl.textContent = pct >= 99.5 ? 'delivered ✓' : 'on the way';
+      statusEl.classList.toggle('is-on', scrollTop > 80);
+      ticking = false;
+    }
+    document.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(updateRoute); ticking = true; }
+    }, { passive: true });
+    window.addEventListener('resize', updateRoute);
+    updateRoute();
+
+    /* Scroll reveal */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    setTimeout(() => {
+      document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => observer.observe(el));
+    }, 50);
+  </script>
+</body>
+
+</html>
