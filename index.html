@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>nono.delivery26 — Courier &amp; Delivery in Medea</title>
+  <title>nono.delivery26 — توصيل وخدمات بريد سريع في المدية</title>
   <meta name="description"
-    content="Independent courier and delivery service in Medea, Algeria. Fast, careful, on time. Message on Facebook or call directly.">
+    content="خدمة توصيل وبريد سريع مستقلة في المدية، الجزائر. توصيل سريع وآمن في الوقت المحدد. راسلنا على فيسبوك أو اتصل مباشرة.">
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23FF5A1F'/%3E%3C/svg%3E">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet">
 
   <style>
     /* =========================================================
-   COURIER LINK PAGE — STYLE SHEET
+   COURIER LINK PAGE — STYLE SHEET (Arabic / RTL version)
    Theme: "delivery docket" — paper tags, dashed routes,
    ink-navy base, signal-orange + mint accents.
    ========================================================= */
@@ -50,9 +50,9 @@
       --ink-text: #16242B;
       /* dark text on paper/orange */
 
-      --font-display: 'Bricolage Grotesque', 'Inter', sans-serif;
-      --font-body: 'Inter', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Cairo', 'Bricolage Grotesque', sans-serif;
+      --font-body: 'Cairo', 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', 'Cairo', monospace;
 
       --container: 1140px;
       --r-lg: 26px;
@@ -342,8 +342,8 @@
     .eyebrow {
       font-family: var(--font-mono);
       font-size: 12px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
+      letter-spacing: 0;
+      text-transform: none;
       color: var(--mint);
       display: flex;
       align-items: center;
@@ -369,15 +369,15 @@
       font-family: var(--font-display);
       font-weight: 700;
       font-size: clamp(28px, 4vw, 40px);
-      line-height: 1.12;
+      line-height: 1.16;
       margin: 0 0 14px;
-      letter-spacing: -.01em;
+      letter-spacing: 0;
     }
 
     .section-head p {
       color: var(--text-dim);
       font-size: 16.5px;
-      line-height: 1.6;
+      line-height: 1.7;
       margin: 0;
     }
 
@@ -420,7 +420,7 @@
       gap: 9px;
       background: var(--ink-2);
       border: 1px solid var(--ink-border);
-      padding: 7px 14px 7px 10px;
+      padding: 7px 10px 7px 14px;
       border-radius: 999px;
       font-family: var(--font-mono);
       font-size: 12px;
@@ -446,6 +446,24 @@
       animation: pulse-ring 2.2s ease-out infinite;
     }
 
+    .status-dot.is-off {
+      background: #E2493D;
+    }
+
+    .status-dot.is-off::after {
+      border-color: #E2493D;
+      animation: none;
+      opacity: 0;
+    }
+
+    .status-pill.is-off {
+      border-color: rgba(226, 73, 61, .35);
+    }
+
+    .status-pill.is-off span#statusText {
+      color: #E2A39C;
+    }
+
     @keyframes pulse-ring {
       0% {
         transform: scale(.6);
@@ -461,9 +479,9 @@
     .hero h1 {
       font-family: var(--font-display);
       font-weight: 800;
-      letter-spacing: -.015em;
-      font-size: clamp(40px, 6.6vw, 68px);
-      line-height: 1.02;
+      letter-spacing: 0;
+      font-size: clamp(36px, 6.2vw, 60px);
+      line-height: 1.1;
       margin: 0 0 10px;
     }
 
@@ -471,7 +489,7 @@
       font-family: var(--font-mono);
       font-size: 13px;
       color: var(--text-dim);
-      letter-spacing: .04em;
+      letter-spacing: 0;
       margin: 0 0 18px;
     }
 
@@ -481,7 +499,7 @@
 
     .hero p.tagline {
       font-size: 18px;
-      line-height: 1.65;
+      line-height: 1.75;
       color: var(--text-dim);
       max-width: 520px;
       margin: 0 0 32px;
@@ -561,7 +579,7 @@
     .logo-card__status {
       position: absolute;
       top: 18px;
-      right: 18px;
+      left: 18px;
       z-index: 2;
       width: 13px;
       height: 13px;
@@ -613,7 +631,7 @@
       font-family: var(--font-mono);
       font-size: 11.5px;
       color: var(--text-dim);
-      letter-spacing: .03em;
+      letter-spacing: 0;
     }
 
     .logo-caption svg {
@@ -714,7 +732,7 @@
 
     .stub-card__body p {
       font-size: 14px;
-      line-height: 1.55;
+      line-height: 1.6;
       color: #5b5340;
       margin: 0;
     }
@@ -735,7 +753,7 @@
       padding: 13px 24px;
       font-family: var(--font-mono);
       font-size: 11px;
-      letter-spacing: .04em;
+      letter-spacing: 0;
       color: #6b5f47;
       display: flex;
       align-items: center;
@@ -743,7 +761,7 @@
     }
 
     .stub-card__tag::before {
-      content: "▸";
+      content: "◂";
       color: var(--signal);
     }
 
@@ -804,7 +822,7 @@
       background: var(--ink-2);
       border: 1px solid var(--ink-border);
       border-radius: var(--r-md);
-      padding: 30px 28px;
+      padding: 10px 8px;
     }
 
     .panel h3 {
@@ -846,7 +864,7 @@
     }
 
     .hours-table td:last-child {
-      text-align: right;
+      text-align: left;
       font-weight: 600;
     }
 
@@ -854,7 +872,7 @@
       margin-top: 18px;
       font-size: 13px;
       color: var(--text-dim);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .map-art {
@@ -869,7 +887,7 @@
     .coverage-note {
       font-size: 14.5px;
       color: var(--text-dim);
-      line-height: 1.6;
+      line-height: 1.7;
       margin: 0;
     }
 
@@ -902,7 +920,7 @@
     }
 
     .link-row:hover {
-      transform: translateY(-3px) translateX(2px);
+      transform: translateY(-3px) translateX(-2px);
       border-color: var(--signal);
       background: var(--ink-3);
     }
@@ -928,7 +946,7 @@
     .link-row:hover .link-row__icon {
       background: var(--ink);
       color: var(--mint);
-      transform: rotate(-6deg) scale(1.06);
+      transform: rotate(6deg) scale(1.06);
     }
 
     .link-row__text {
@@ -949,6 +967,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      direction: ltr;
+      unicode-bidi: isolate;
+      text-align: right;
     }
 
     .link-row__arrow {
@@ -960,10 +981,11 @@
     .link-row__arrow svg {
       width: 18px;
       height: 18px;
+      transform: scaleX(-1);
     }
 
     .link-row:hover .link-row__arrow {
-      transform: translateX(5px);
+      transform: translateX(-5px);
       color: var(--mint);
     }
 
@@ -1024,7 +1046,7 @@
     <div class="route-bar__pin" id="routePin"></div>
   </div>
   <div class="route-status" id="routeStatus" aria-hidden="true">
-    <span><span id="routeStatusLabel">on the way</span> · <b id="routePct">0%</b></span>
+    <span><span id="routeStatusLabel">في الطريق</span> · <b id="routePct">0%</b></span>
   </div>
 
   <header class="site-header">
@@ -1048,7 +1070,7 @@
             <path d="M14 8.6h-1.3c-.9 0-1.3.5-1.3 1.4v1.3H9v2.1h2.4V18h2.3v-4.6h2l.4-2.1h-2.4v-1c0-.4.2-.6.6-.6H14V8.6Z"
               fill="currentColor" stroke="none" />
           </svg>
-          <span class="btn-label">Message</span>
+          <span class="btn-label">راسلني</span>
         </a>
       </div>
     </div>
@@ -1062,7 +1084,7 @@
         <div>
           <div class="status-pill"><span class="status-dot"></span><span id="statusText">—</span></div>
           <h1 id="heroName">—</h1>
-          <p class="hero__id">Independent courier · <b id="heroCity">—</b></p>
+          <p class="hero__id">موصّل (دليفري) مستقل · <b id="heroCity">—</b></p>
           <p class="tagline" id="heroTagline">—</p>
           <div class="hero__cta">
             <!-- Call Now: Set to solid orange primary action -->
@@ -1072,7 +1094,7 @@
                 <path
                   d="M6.6 10.8c1.6 3.2 4.4 6 7.6 7.6l2.5-2.5c.3-.3.8-.4 1.2-.3 1.3.4 2.7.6 4.1.6.6 0 1 .4 1 1V21c0 .6-.4 1-1 1C10.6 22 2 13.4 2 2.9c0-.6.4-1 1-1h3.8c.6 0 1 .4 1 1 0 1.4.2 2.8.6 4.1.1.4 0 .9-.3 1.2L6.6 10.8Z" />
               </svg>
-              Call now
+              اتصل الآن
             </a>
             <!-- Message on Facebook: Set to normal outline action -->
             <a class="btn btn-outline" id="ctaFacebook" href="#" target="_blank" rel="noopener">
@@ -1083,7 +1105,7 @@
                   d="M14 8.6h-1.3c-.9 0-1.3.5-1.3 1.4v1.3H9v2.1h2.4V18h2.3v-4.6h2l.4-2.1h-2.4v-1c0-.4.2-.6.6-.6H14V8.6Z"
                   fill="currentColor" stroke="none" />
               </svg>
-              Message on Facebook
+              راسلني على فيسبوك
             </a>
           </div>
           <div class="hero__note">
@@ -1092,7 +1114,7 @@
               <circle cx="12" cy="12" r="8.5" />
               <path d="M12 7.5V12l3 2" />
             </svg>
-            <span>Usually replies in under 10 minutes</span>
+            <span>أرد عادةً في أقل من 10 دقائق</span>
           </div>
         </div>
 
@@ -1116,9 +1138,9 @@
     <section id="contact">
       <div class="container">
         <div class="section-head reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
-          <p class="eyebrow" style="justify-content:center;">Get in touch</p>
-          <h2>Send a message.</h2>
-          <p style="margin:0 auto;">Tap whichever way you like to reach me — I check all of these.</p>
+          <p class="eyebrow" style="justify-content:center;">تواصل معي</p>
+          <h2>أرسل رسالة.</h2>
+          <p style="margin:0 auto;">اختر الطريقة التي تناسبك للتواصل معي — أتابع كل هذه الوسائل.</p>
         </div>
         <div class="links-list reveal" id="linksList"></div>
       </div>
@@ -1127,10 +1149,10 @@
     <section id="services">
       <div class="container">
         <div class="section-head reveal">
-          <p class="eyebrow">What I deliver</p>
-          <h2>Pick a route, I'll handle the rest.</h2>
-          <p>From dinner that's still steaming to documents that need a signature — tell me what and where, and I'll
-            take it from here.</p>
+          <p class="eyebrow">ما يمكنني توصيله</p>
+          <h2>اختر المهمة، وأنا أتولى الباقي.</h2>
+          <p>من الوجبات التي لا تزال ساخنة إلى الوثائق التي تحتاج توقيعًا — أخبرني بما تريد توصيله وإلى أين، وسأتكفل
+            بالباقي.</p>
         </div>
         <div class="services-grid" id="servicesGrid"></div>
       </div>
@@ -1147,9 +1169,9 @@
     <section id="coverage">
       <div class="container">
         <div class="section-head reveal">
-          <p class="eyebrow">Where &amp; when</p>
-          <h2>On the road, on schedule.</h2>
-          <p>Predictable hours and a clear coverage area, so you always know when to expect me.</p>
+          <p class="eyebrow">أين ومتى</p>
+          <h2>في الطريق، وفي الوقت المحدد.</h2>
+          <p>ساعات عمل واضحة ومنطقة تغطية محددة، لتعرف دائمًا متى تتوقع وصولي.</p>
         </div>
         <div class="coverage-grid">
           <div class="panel reveal">
@@ -1159,10 +1181,9 @@
                 <circle cx="12" cy="12" r="8.5" />
                 <path d="M12 7.5V12l3 2" />
               </svg>
-              Working hours
+              ساعات العمل
             </h3>
             <table class="hours-table" id="hoursTable"></table>
-            <p class="hours-note">Outside these hours? Send a message anyway — urgent runs are sometimes possible.</p>
           </div>
           <div class="panel reveal">
             <h3>
@@ -1171,7 +1192,7 @@
                 <path d="M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z" />
                 <circle cx="12" cy="10" r="2.6" />
               </svg>
-              Coverage area
+              منطقة التغطية
             </h3>
             <svg class="map-art" viewBox="0 0 320 120" preserveAspectRatio="none" aria-hidden="true">
               <rect width="320" height="120" fill="#15262F" />
@@ -1206,7 +1227,7 @@
     <div class="container">
       <div class="footer-line"></div>
       <p id="footerName">—</p>
-      <p>Built for speed, care, and an on-time arrival <span class="heart">●</span></p>
+      <p>صُمم للسرعة والعناية والوصول في الوقت المحدد <span class="heart">●</span></p>
     </div>
   </footer>
 
@@ -1214,40 +1235,46 @@
     const CONFIG = {
       name: "nono.delivery26",
       initials: "NONO",
-      role: "Independent Courier & Delivery Partner",
-      city: "Medea, Algeria",
-      tagline: "Fast, careful, and on time — delivery you can actually rely on. No call centre, no middleman: message me directly and I'll get it there.",
+      role: "موصّل وشريك توصيل مستقل",
+      city: "المدية، الجزائر",
+      tagline: "توصيل سريع وآمن وفي الوقت المحدد — خدمة يمكنك الاعتماد عليها فعلاً. بدون مركز اتصال ولا وسيط: راسلني مباشرة وسأتولى الباقي.",
 
       logoUrl: "logo.png",
 
-      status: { available: true, text: "Available now — accepting orders" },
+      status: {
+        availableText: "متوفر الآن — أستقبل الطلبات",
+        unavailableText: "غير متوفر — خارج ساعات العمل",
+        // ساعات العمل: من الساعة startHour إلى endHour (00 تعني منتصف الليل)
+        startHour: 9,
+        endHour: 24
+      },
 
       phoneDisplay: "+213 782307059",
       phoneHref: "tel:+213 782307059",
       facebookHref: "https://www.facebook.com/people/NONODelivery26/61591314441848/?_rdc=1&_rdr#",
 
       services: [
-        { icon: "food", title: "Food & Restaurant Orders", desc: "Hot meals picked up fast and delivered while they're still fresh.", tag: "" },
-        { icon: "package", title: "Documents & Parcels", desc: "Papers, packages, and small parcels handled with care, door to door.", tag: "Same-day" },
-        { icon: "cart", title: "Grocery & Pharmacy Runs", desc: "Send the list, I'll handle the queue and bring it straight to you.", tag: "Zone: city-wide" },
-        { icon: "bolt", title: "Express Courier", desc: "Urgent drop-off? One message and it's on its way within minutes.", tag: "Priority" }
+        { icon: "food", title: "طلبات الطعام والمطاعم", desc: "وجبات ساخنة يتم استلامها بسرعة وتوصيلها وهي لا تزال طازجة.", tag: "" },
+        { icon: "package", title: "الوثائق والطرود", desc: "أوراق وطرود وصغائر يتم التعامل معها بعناية، من الباب إلى الباب.", tag: "توصيل في نفس اليوم" },
+        { icon: "cart", title: "مشاوير البقالة والصيدلية", desc: "أرسل لي القائمة، وأنا أتكفل بالانتظار في الطابور وأجلبها إليك مباشرة.", tag: "تغطية على مستوى المدينة" },
+        { icon: "bolt", title: "توصيل سريع وعاجل", desc: "هل تحتاج توصيلاً عاجلاً؟ رسالة واحدة وتكون الطلبية في الطريق خلال دقائق.", tag: "أولوية" }
       ],
 
       hours: [
-        { day: "Sat – Thur", time: "09:00 – 00:00" },
+        { day: "السبت – الخميس", time: "09:00 – 00:00" },
 
       ],
-      coverageNote: "Based in <b>Medea</b> — covering nearby wilayas and surrounding towns on request. Just share your address and I'll confirm if it's on the route.",
+      coverageNote: "أعمل من <b>المدية</b> — وأغطي الولايات والبلدات المجاورة عند الطلب. فقط أرسل لي عنوانك وسأؤكد لك إذا كان ضمن المسار.",
 
       links: [
-        { type: "phone", label: "Call directly", sub: "+213 782307059", href: "tel:+213 782307059" },
-        { type: "instagram", label: "Instagram", sub: "@nono.delivery26", href: "https://www.instagram.com/nono.delivery26?igsh=MTkzb2lubWZzMWZkcA%3D%3D" },
-        { type: "facebook", label: "Facebook", sub: "nono.delivery26", href: "https://www.facebook.com/people/NONODelivery26/61591314441848/?_rdc=1&_rdr#" },
-        { type: "tiktok", label: "Tiktok", sub: "NONO.Delivery26", href: "https://www.tiktok.com/@nono.delivery26?_r=1&_t=ZS-97PBbN1C0ZB" },
-        { type: "pin", label: "Service area", sub: "Medea & surrounding areas", href: "https://maps.google.com/?q=Medea,Algeria" }
+        { type: "phone", label: "اتصل مباشرة", sub: "+213 782307059", href: "tel:+213 782307059" },
+        { type: "instagram", label: "إنستغرام", sub: "@nono.delivery26", href: "https://www.instagram.com/nono.delivery26?igsh=MTkzb2lubWZzMWZkcA%3D%3D" },
+        { type: "facebook", label: "فيسبوك", sub: "nono.delivery26", href: "https://www.facebook.com/people/NONODelivery26/61591314441848/?_rdc=1&_rdr#" },
+        { type: "tiktok", label: "تيك توك", sub: "NONO.Delivery26", href: "https://www.tiktok.com/@nono.delivery26?_r=1&_t=ZS-97PBbN1C0ZB" },
+        { type: "pin", label: "منطقة الخدمة", sub: "المدية والمناطق المحيطة", href: "https://maps.google.com/?q=Medea,Algeria" }
       ],
 
-      footerNote: "© 2026 NONO.Delivery26 · All deliveries handled personally."
+      footerNote: "© 2026 NONO.Delivery26 · جميع التوصيلات تتم بشكل شخصي."
     };
 
     const ICONS = {
@@ -1282,8 +1309,8 @@
         markImg.onload = () => { markImg.style.display = 'block'; document.getElementById('brandInitials').style.display = 'none'; };
       }
 
-      // Hero
-      document.getElementById('statusText').textContent = CONFIG.status.text;
+      // Hero — availability is calculated live, not hardcoded
+      updateAvailability();
       document.getElementById('heroName').textContent = CONFIG.name;
       document.getElementById('heroCity').textContent = CONFIG.city;
       document.getElementById('heroTagline').textContent = CONFIG.tagline;
@@ -1336,6 +1363,29 @@
     }
     render();
 
+    /* Live availability — compares current local time to working hours */
+    function isWithinWorkingHours() {
+      const hour = new Date().getHours();
+      const { startHour, endHour } = CONFIG.status;
+      if (startHour <= endHour) {
+        return hour >= startHour && hour < endHour;
+      }
+      // handles ranges that cross midnight, e.g. 09 → 24 wraps to 00
+      return hour >= startHour || hour < endHour;
+    }
+
+    function updateAvailability() {
+      const available = isWithinWorkingHours();
+      const dot = document.querySelector('.status-dot');
+      const pill = document.querySelector('.status-pill');
+      const textEl = document.getElementById('statusText');
+
+      textEl.textContent = available ? CONFIG.status.availableText : CONFIG.status.unavailableText;
+      dot.classList.toggle('is-off', !available);
+      pill.classList.toggle('is-off', !available);
+    }
+    setInterval(updateAvailability, 60 * 1000);
+
     /* Route progress bar */
     const fillEl = document.getElementById('routeFill');
     const pinEl = document.getElementById('routePin');
@@ -1352,7 +1402,7 @@
       fillEl.style.width = pct + '%';
       pinEl.style.left = pct + '%';
       pctEl.textContent = Math.round(pct) + '%';
-      labelEl.textContent = pct >= 99.5 ? 'delivered ✓' : 'on the way';
+      labelEl.textContent = pct >= 99.5 ? 'تم التوصيل ✓' : 'في الطريق';
       statusEl.classList.toggle('is-on', scrollTop > 80);
       ticking = false;
     }
